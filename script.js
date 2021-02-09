@@ -1,15 +1,29 @@
-const submitUserInput = () => {
+const submitUserInput = async () => {
     const searchValue = document.getElementById("searchValue").value;
     // console.log(searchValue);
-    fetch(`https://api.lyrics.ovh/suggest/${searchValue}`)
-        .then(res => res.json())
-        .then(data => displaySongToUser(data.data))
-};
+    //     .then(res => res.json())
+    //     .then(data => displaySongToUser(data.data))
+
+    const url = `https://api.lyrics.ovh/suggest/${searchValue}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    displaySongToUser(data.data);
+    // // .catch(error=> 
+    // //     {( displayError("Something went Wrong"))
+    // .catch(error => displayError(error));
+
+}
+
+
+
+
 
 const displaySongToUser = (songs) => {
     //console.log(songs);
 
-    const songContainer = document.getElementById("songContainer")
+    const songContainer = document.getElementById("songContainer");
+    songContainer.innerHTML = "";
+
     songs.forEach(song => {
         //console.log(song.artist);
         // console.log(song.title);
@@ -33,12 +47,24 @@ const displaySongToUser = (songs) => {
     });
 
 }
-const getLyrics = (artist, title) => {
-    fetch(`https://api.lyrics.ovh/v1/${artist}/${title}`)
-        .then(res => res.json())
-        .then(data => displayLyrics(data.lyrics))
+const getLyrics = async (artist, title) => {
+    // fetch(`https://api.lyrics.ovh/v1/${artist}/${title}`)
+    //     .then(res => res.json())
+    //     .then(data => displayLyrics(data.lyrics))
+    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
+    const res = await fetch(url);
+    const data = await res.json();
+    displayLyrics(data.lyrics);
+
+
+
+
 }
 const displayLyrics = lyrics => {
     const lyricsDiv = document.getElementById("song-lyrics");
     lyricsDiv.innerText = lyrics;
+}
+const displayError = error => {
+    const errorTag = document.getElementById("error");
+    errorTag.innerText = error;
 }
